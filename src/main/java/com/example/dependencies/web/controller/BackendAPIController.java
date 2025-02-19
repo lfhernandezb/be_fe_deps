@@ -1,12 +1,9 @@
 package com.example.dependencies.web.controller;
 
-import com.example.dependencies.dtos.Term;
 import com.example.dependencies.dtos.Terms;
 import com.example.dependencies.dtos.backendapi.request.*;
-import com.example.dependencies.dtos.backendapi.request.Host;
 import com.example.dependencies.dtos.backendapi.request.Method;
 import com.example.dependencies.dtos.backendapi.request.Path;
-import com.example.dependencies.dtos.backendapi.request.Port;
 import com.example.dependencies.dtos.backendapi.request.Service;
 import com.example.dependencies.dtos.backendapi.response.*;
 import org.slf4j.Logger;
@@ -53,34 +50,8 @@ public class BackendAPIController {
                 .aggs(methodAggs)
                 .build();
 
-        PortAggs portAggs = PortAggs.builder()
-                .method(method)
-                .build();
-
-        Terms terms = Terms.builder()
-                .field("url.port")
-                .build();
-
-        Port port = Port.builder()
-                .terms(terms)
-                .aggs(portAggs)
-                .build();
-
-        HostAggs hostAggs = HostAggs.builder()
-                .port(port)
-                .build();
-
-        Terms terms3 = Terms.builder()
-                .field("host.name")
-                .build();
-
-        Host host = Host.builder()
-                .terms(terms3)
-                .aggs(hostAggs)
-                .build();
-
         ServiceAggs serviceAggs = ServiceAggs.builder()
-                .host(host)
+                .method(method)
                 .build();
 
         Terms terms4 = Terms.builder()
@@ -143,29 +114,13 @@ public class BackendAPIController {
                 b -> {
                     System.out.println(b.getKey());
 
-                    Arrays.stream(b.getHost().getBuckets()).map(
+                    Arrays.stream(b.getMethod().getBuckets()).map(
                             c -> {
                                 System.out.println(c.getKey());
 
-                                Arrays.stream(c.getPort().getBuckets()).map(
+                                Arrays.stream(c.getPath().getBuckets()).map(
                                         d -> {
                                             System.out.println(d.getKey());
-
-                                            Arrays.stream(d.getMethod().getBuckets()).map(
-                                                    e -> {
-                                                        System.out.println(e.getKey());
-
-                                                        Arrays.stream(e.getPath().getBuckets()).map(
-                                                                f -> {
-                                                                    System.out.println(f.getKey());
-                                                                    return f;
-                                                                }
-                                                        ).toArray(); //.forEach(System.out::println);
-
-                                                        return e;
-                                                    }
-                                            ).toArray(); //.forEach(System.out::println);
-
                                             return d;
                                         }
                                 ).toArray(); //.forEach(System.out::println);

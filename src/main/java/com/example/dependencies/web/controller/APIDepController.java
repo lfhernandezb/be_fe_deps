@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Arrays;
 
 @RestController
@@ -148,7 +150,22 @@ public class APIDepController {
                                 System.out.println(c.getKey());
                                 Arrays.stream(c.getEndpoint().getBuckets()).map(
                                         d -> {
+                                            // d.geyKey() tiene la forma MÉTODO URL
+                                            // obtengo el metodo y la url
                                             System.out.println(d.getKey());
+                                            String[] methodUrl = d.getKey().split(" ");
+                                            System.out.println(methodUrl[0]);
+
+                                            try {
+                                                URL url2 = new URL(methodUrl[1]);
+                                                System.out.println(url2.getHost());
+                                                System.out.println(url2.getPath());
+                                                System.out.println(url2.getProtocol());
+
+                                            } catch (MalformedURLException e) {
+                                                throw new RuntimeException(e);
+                                            }
+
                                             return d;
                                         }
                                 ).toArray(); //.forEach(System.out::println);

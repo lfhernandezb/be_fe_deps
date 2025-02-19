@@ -4,5 +4,5 @@ package com.example.dependencies.dtos.backendapi.response;
 public class ServiceBucket {
     private String key;
     private Long docCount;
-    private Host host;
+    private Method method;
 }

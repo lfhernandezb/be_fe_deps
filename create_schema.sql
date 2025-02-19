@@ -24,8 +24,7 @@ CREATE TABLE FrontEndServiceHost (
 -- Create BackendService table
 CREATE TABLE BackendService (
     id INT PRIMARY KEY IDENTITY(1,1),
-    name NVARCHAR(100) NOT NULL,
-    FOREIGN KEY (host_id) REFERENCES Host(id)
+    name NVARCHAR(100) NOT NULL
 );
 
 -- Create BackEndServiceHost table
@@ -73,6 +72,8 @@ CREATE TABLE DBQuery (
 CREATE TABLE API (
     id INT PRIMARY KEY IDENTITY(1,1),
     name NVARCHAR(100) NOT NULL,
+    method NVARCHAR(10) NOT NULL CHECK (method IN ('GET', 'POST', 'PUT', 'DELETE')),
+    path NVARCHAR(100) NOT NULL,
     backend_service_id INT NOT NULL,
     FOREIGN KEY (backend_service_id) REFERENCES BackendService(id)
 );
